@@ -2,6 +2,79 @@
 import math
 import numpy as np
 
+def tokenize(sentence_list, separators, stopwords):
+	tokenized=[]
+
+	for sentence in sentence_list:
+		temp=[]
+		sentence=sentence.lower()
+		#tokenize sentence
+		for sep in separators:
+			sentence=sentence.replace(sep, ' ')
+		sentence=sentence.split(' ')
+		#take off stop words
+		for word in sentence:
+			if word not in stopwords:
+				temp.append(word)
+		tokenized.append(temp)
+	return tokenized
+
+def create_dictionary(tokenized_matrix):
+	dictionary=[]
+	for sentence in tokenized_matrix:
+		for word in sentence:
+			if word not in dictionary:
+				dictionary.append(word)
+	return dictionary
+
+def create_wordvec(tokenized_sentence, dictionary):
+	word_vec=[]
+	for word in dictionary:
+		word_vec.append(tokenized_sentence.count(word))
+	return word_vec
+
+def tf(word_vec_matriz):
+	tf_matrix=[]
+	for line in word_vec_matriz:
+		tf_matrix.append(tf_line(line))
+	return tf_matrix
+
+def tf_line(line):
+	line_tf=[]
+	for freq in line:
+		if (freq):
+			line_tf.append(1+math.log(freq,2))
+		else:
+			line_tf.append(0)
+	return line_tf
+
+def idf(word_vec_matriz, number_of_files):
+	idf=[]
+	for row in np.transpose(word_vec_matriz):
+		idf.append(math.log(number_of_files/len(np.nonzero(row)[0]),2))
+	return idf
+
+def idf_line(word_vec, number_of_files):
+	idf_line=[]
+	for row in word_vec:
+		if row:
+			idf_line.append(math.log(number_of_files/len(np.nonzero(row)[0]),2))
+		else:
+			idf_line.append(0)
+	return idf_line
+
+
+def tf_idf(tf, idf):
+	tf_idf=[]
+	for line in tf:
+		tf_idf.append(tf_idf_line(line, idf))
+	return tf_idf
+
+def tf_idf_line(tf_line, idf):
+	tf_idf_vec=[]
+	for idx, element in enumerate(tf_line):
+		tf_idf_vec.append(element*idf[idx])
+	return tf_idf_vec
 
 M=['O peã e o caval são pec de xadrez. O caval é o melhor do jog.',
 'A jog envolv a torr, o peã e o rei.',
@@ -11,9 +84,10 @@ M=['O peã e o caval são pec de xadrez. O caval é o melhor do jog.',
 
 stopwords=['','a', 'o', 'e', 'é', 'de', 'do', 'no','são']
 
-separadores=[' ',',','.','!','?']
+separators=[' ',',','.','!','?']
 
 q='xadrez peã caval torr'
+q=q.split(' ')
 
 print 'arquivos:'
 for i in M:
@@ -23,108 +97,22 @@ print '\n\nconsulta: '
 print q
 print ' '
 
-q=q.split(' ')
 
-#tokenizacao dos arquivos
-M2=[]
-for i in M:
-	i=i.lower()
-	for sep in separadores:
-		i=i.replace(sep, ' ')
-	i=i.split(' ')
-	M2.append(i)
+tokenized_matrix=tokenize(M, separators, stopwords)
+dictionary=create_dictionary(tokenized_matrix)
 
-word_list=[]
-M3=[]
+word_vec_matrix=[]
+for sentence in tokenized_matrix:
+	word_vec_matrix.append(create_wordvec(sentence, dictionary))
 
-#retirada de stop words
-for i in M2:
-	temp=[]
-	for token in i:
-		if token not in stopwords:
-			temp.append(token)
-	M3.append(temp)
+tf_idf_sentences=tf_idf(tf(word_vec_matrix), idf(word_vec_matrix, len(M)))
 
-#criacao de word vec
-for i in M3:
-	for token in i:
-		if token not in word_list:
-			word_list.append(token)
+print "tf-idf of the sentences:"
+print tf_idf_sentences
+print '\n\n'
 
-M_inc=[]
-tf=[]
-#word vec para cada arquivo
-for i in M3:
-	temp=[]
-	temp2=[]
-	for token in word_list:
-		freq=i.count(token)
-		temp.append(freq)
-		if (freq):
-			temp2.append(1+math.log(freq,2))
-		else:
-			temp2.append(0)
-	M_inc.append(temp)
-	tf.append(temp2)
+word_vec_question=create_wordvec(q, dictionary)
+tf_idf_question=tf_idf_line(tf_line(word_vec_question), idf_line(word_vec_question, len(M)))
 
-
-idf=[]
-for row in np.transpose(M_inc):
-	idf.append(math.log(len(M)/len(np.nonzero(row)[0]),2))
-
-tf_idf=[]
-for line in tf:
-	temp=[]
-	for idx, element in enumerate(line):
-		temp.append(element*idf[idx])
-	tf_idf.append(temp)
-
-print 'tf-idf matrix:'
-print tf_idf
-
-
-#word vec para a consulta
-q_inc=[]
-tf_q=[]
-for token in word_list:
-	freq=q.count(token)
-	q_inc.append(freq)
-	if freq:
-		tf_q.append(1+math.log(freq,2))
-	else:
-		tf_q.append(0)
-
-idf_q=[]
-for row in np.transpose(q_inc):
-	try :
-		idf_q.append(math.log(len(q)/len(np.nonzero(row)[0]),2))
-	except:
-		idf_q.append(0)
-
-
-tf_idf_q=[]
-for idx, element in enumerate(tf_q):
-		tf_idf_q.append(element*idf_q[idx])
-
-print 'tf-idf-q matrix:'
-print tf_idf_q
-
-#separacao dos index que sao relevantes para a consulta
-index_list=[]
-for idx, element in enumerate(q_inc):
-	if element:
-		index_list.append(idx)
-
-
-func=str(raw_input('digite a funcao que deseja executar ["and" ou "or"]: '))
-
-#consulta
-for idx,i in enumerate(M_inc):
-	is_in_question=bool(i[index_list[0]])
-	for j in index_list[1:]:
-		if func=='and':
-			is_in_question=is_in_question & bool(i[j])
-		if func=='or':
-			is_in_question=is_in_question | bool(i[j])
-	if is_in_question:
-		print M[idx]
+print "tf-idf of the question:"
+print tf_idf_question
