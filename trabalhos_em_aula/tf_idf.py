@@ -51,14 +51,14 @@ def tf_line(line):
 def idf(word_vec_matriz, number_of_files):
 	idf=[]
 	for row in np.transpose(word_vec_matriz):
-		idf.append(math.log(number_of_files/len(np.nonzero(row)[0]),2))
+		idf.append(math.log(float(number_of_files)/len(np.nonzero(row)[0]),2))
 	return idf
 
 def idf_line(word_vec, number_of_files):
 	idf_line=[]
 	for row in word_vec:
 		if row:
-			idf_line.append(math.log(number_of_files/len(np.nonzero(row)[0]),2))
+			idf_line.append(math.log(float(number_of_files)/len(np.nonzero(row)[0]),2))
 		else:
 			idf_line.append(0)
 	return idf_line
