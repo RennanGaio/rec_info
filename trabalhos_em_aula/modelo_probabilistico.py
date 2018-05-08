@@ -34,7 +34,7 @@ def create_wordvec(tokenized_sentence, dictionary):
 	return word_vec
 
 def calc_b(freq, estm_len, avg_doclen, K1, B):
-	return (K1 + 1)*freq / K1*( (1-B) + B*(estm_len/avg_doclen) ) +freq
+	return ((K1 + 1)*freq) / (K1*( (1-B) + B*(estm_len/avg_doclen) ) +freq)
 
 def bm25(M, word_vec_matrix, word_vec_q, K, b):
 
@@ -112,4 +112,11 @@ print " "
 word_vec_question=create_wordvec(q, dictionary)
 
 print "rank :"
-print bm25(M, word_vec_matrix, word_vec_question, 1, 0.75)
+
+var = bm25(M, word_vec_matrix, word_vec_question, 1, 0.75)
+print var
+f = open('testfile.txt','w')
+for v in var:
+	if v[1] > 0:
+		f.write(str(M.index(v[0]) + 1) + '\n')
+f.close()
