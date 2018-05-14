@@ -1,0 +1,98 @@
+<top> 
+<num> 1 </num> 
+<PT-title> Energia atômica </PT-title> 
+<PT-desc> Encontrar documentos pró ou contra o emprego de energia atômica para 
+fins pacíficos. </PT-desc> 
+<PT-narr> Documentos relevantes devem fornecer argumentos gerais pró ou contra 
+o uso de energia atômica para fins pacíficos. Relatos sobre acidentes ou 
+desastres específicos envolvendo energia atômica não são de interesse a não 
+ser que também incluam argumentos sobre o assunto. </PT-narr> 
+</top>
+
+<top> 
+<num> 2 </num> 
+<PT-title> Top models </PT-title> 
+<PT-desc> Encontrar nomes de «top models» internacionalmente famosas.
+</PT-desc> 
+<PT-narr> Top models ou supermodelos são modelos cujo sucesso resultou num 
+estatuto de celebridade. Documentos relevantes devem fornecer os nomes das top 
+models famosas a nível internacional. No documento tem de ser claro que esse 
+estatuto foi atingido. </PT-narr> 
+</top>
+
+<top>
+<num> 3 </num> 
+<PT-title> Consequências do divórcio de Carlos e Diana </PT-title> 
+<PT-desc> Terá o divórcio do Príncipe Carlos e da Princesa Diana consequências 
+constitucionais no Reino Unido? </PT-desc> 
+<PT-narr> Apenas documentos que discutam possíveis consequências 
+constitucionais como resultado do divórcio dos Príncipes de Gales são 
+relevantes. </PT-narr> 
+</top>
+
+<top>
+<num> 4 </num>
+<PT-title> Filmes com Keanu Reeves </PT-title> 
+<PT-desc> Encontrar títulos de filmes com Keanu Reaves. </PT-desc>
+<PT-narr> Documentos relevantes devem mencionar os títulos dos filmes onde 
+Keanu Reaves aparece como ator. Apenas os filmes já exibidos ou em exibição 
+são relevantes. Filmes ainda em produção não são relevantes. Reeves deve ser 
+ator no filme e não produtor ou diretor. </PT-narr> 
+</top>
+
+<top>
+<num> 5 </num> 
+<PT-title> Roubo d'«O Grito» </PT-title> 
+<PT-desc> Encontrar informação sobre o roubo da pintura «O Grito», de Edvard 
+Munch, da Galeria Nacional em Oslo. </PT-desc> 
+<PT-narr> Documentos devem relatar o roubo da pintura em Oslo em Fevereiro de 
+1994. Informação geral sobre a pintura ou sobre o artista não são de 
+interesse. </PT-narr> 
+</top>
+
+<top>
+<num> 6 </num> 
+<PT-title> «Quatro Casamentos e um Funeral» </PT-title> 
+<PT-desc> Encontrar relatos do sucesso do filme britânico «Quatro Casamentos e 
+um Funeral». </PT-desc> 
+<PT-narr> Documentos relevantes devem fornecer dados sobre o sucesso e 
+popularidade deste filme. Documentos sobre o enredo do filme não são 
+relevantes. </PT-narr> 
+</top>
+
+<top>
+<num> 7 </num> 
+<PT-title> Brasil-Suécia nas semifinais do Campeonato do Mundo </PT-title> 
+<PT-desc> Encontrar documentos sobre o jogo das meias-finais do Campeonato do 
+Mundo de futebol de 1994 entre o Brasil e a Suécia. </PT-desc> 
+<PT-narr> Qualquer informação sobre este jogo é de interesse, como sejam a 
+composição das equipes, descrições do jogo, resultado final. Relatos de jogos 
+entre o Brasil e a Suécia nas fases anteriores não são relevantes.
+</PT-narr> 
+</top>
+
+<top>
+<num> 8 </num> 
+<PT-title> Vencedores de provas do Grand Slam </PT-title> 
+<PT-desc> Quem ganhou torneios de tênis Grand Slam em 1995? </PT-desc> 
+<PT-narr> Documentos relevantes devem relatar tanto o nome como a 
+nacionalidade de pelo menos um(a) tenista vencedor(a) de uma prova do Grand 
+Slam em 1995. </PT-narr> 
+</top>
+
+<top>
+<num> 9 </num> 
+<PT-title> Óscar do Melhor Filme 1994 </PT-title> 
+<PT-desc> Quem ganhou o Óscar do Melhor Filme em 1994? </PT-desc> 
+<PT-narr> Os documentos têm que mencionar quer o nome do realizador quer o 
+nome do filme que ganhou o prêmio de Melhor Filme. </PT-narr> 
+</top>
+
+<top>
+<num> 10 </num> 
+<PT-title> Morte de Nixon </PT-title> 
+<PT-desc> Encontrar documentos que relatem a doença que vitimaria Richard 
+Nixon em 1994 e o seu falecimento. </PT-desc> 
+<PT-narr> Documentos relevantes devem discutir as causas da doença de Nixon ou 
+relatar a sua morte. </PT-narr> 
+</top>
