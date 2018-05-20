@@ -1,14 +1,15 @@
 import subprocess
 
-filename="rec_info_stem_trab1"
+filename="rec_info_stop_trab1"
 consulta=1
 queries=open("query.txt").read().split("\n")
-rank=open("rank_stem.txt", "w")
+rank=open("rank_stop.txt", "w")
 queries.pop(-1)
 dupla= "Rennan_Alex"
+stopwords_file= "stopwords.txt"
 
 for query in queries:
-    command="zet -n 100 -f " + filename + " " + query
+    command="zet -n 100 -f " + filename + " --query-stop "+ stopwords_file+ " " + query
     zet_output=subprocess.check_output([command], shell=True)
     zet_list=zet_output.split("\n")
 
