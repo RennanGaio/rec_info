@@ -40,7 +40,8 @@ def MAP(table, R):
 
 if __name__ == '__main__':
     R = ['1','2']
-    recuperados=open('testfile.txt', 'r').read().split()
+    recuperados=open('bm25-rec.txt', 'r').read().split()
+    #recuperados=open('vet-rec.txt', 'r').read().split()
 
     print (recuperados)
     print ("\n")
