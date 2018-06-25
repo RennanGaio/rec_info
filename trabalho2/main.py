@@ -196,7 +196,8 @@ def rank_articles():
     for idx,prob in enumerate(probs):
         mylines_test[idx].append(prob)
 
-    print mylines_test.sort(key=lambda x:x[-1])
+    mylines_test.sort(key=lambda x:x[-1])
+    print mylines_test.reverse()
 
 
 #def match_editors():
