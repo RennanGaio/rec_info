@@ -4,6 +4,22 @@ import pandas as pd
 import os
 import glob
 
+from sklearn.model_selection import KFold
+from sklearn.metrics import roc_auc_score
+
+import sys
+import numpy as np
+import sklearn
+from sklearn import preprocessing
+from sklearn import neighbors, datasets
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB, MultinomialNB, BernoulliNB
+from sklearn.svm import LinearSVC, SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import decomposition
+from sklearn.model_selection import GridSearchCV
+import xgboost as xgb
+
 def check_exist_lang(lang,r, wiki_id):
     #checks if exists a wikipedia link of a given language of a given subject
     wiki = lang+"wiki"
