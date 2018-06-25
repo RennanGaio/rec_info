@@ -56,9 +56,16 @@ def find_files(source_L="en", target_L="pt"):
     print "total errors: "+str(error_cont)
     return itens_ID_exists, itens_ID_dont_exists
 
+def search_index_views(iten, data,has_pt):
+    eng_views=data[data['wiki_name'] == iten[1]]['views'].unique()[0]
+    if has_pt:
+        pt_views=data[data['wiki_name'] == iten[2]]['views'].unique()[0]
+        return eng_views, pt_views
+    return eng_views
+
 def associate_page_views(itens_ID_exists, itens_ID_dont_exists):
-    page_views_file = open("page_views.csv")
-    missing_rank_file = open("missing_rank.csv")
+    page_views_file = open("page_views.csv", "a")
+    missing_rank_file = open("missing_rank.csv", "a")
 
     files = glob.glob('pageview-11-05-2015/*')
     #second column convert to datetimeindex
@@ -66,27 +73,23 @@ def associate_page_views(itens_ID_exists, itens_ID_dont_exists):
     data = pd.concat(dfs).sort_index()
     data.columns = ["lang", "wiki_name", "views", "size"]
 
-    for page_views in os.listdir("pageview-11-05-2015"):
-        file_name="./pageview-11-05-2015/"+str(page_views)
-        data = pd.read_csv(file_name, sep=" ", header=None)
-        data.columns = ["lang", "wiki_name", "views", "size"]
-        for i in itens_ID_exists:
-            #isso aqui vai mudar
-            for d in data:
-                if d["wiki_name"]==i[1] and d["lang"].lower()=="en"
-                    eng_views=d["views"]
-                if d["wiki_name"]==i[2] and d["land"].lower()=="pt"
-                    pt_views=d["views"]
-
-            line=str(i[0])+" "+str(eng_views)+" "+str(pt_views)
-            page_views_file.append(line)
+    for i in itens_ID_exists:
+        eng_views, pt_views=search_index_views(i, data,1)
+        line=str(i[0])+" "+str(eng_views)+" "+str(pt_views)
+        page_views_file.append(line)
+    for i in itens_ID_dont_exists:
+        eng_views=search_index_views(i, data,0)
+        line=str(i[0])+" "+str(eng_views)+" NULL"
+        missing_rank_file.append(line)
 
 
 
-#def rank_articles():
+def rank_articles():
 
 
 #def match_editors():
 
 if __name__ == '__main__':
     itens_ID_exists, itens_ID_dont_exists = find_files()
+    associate_page_views(itens_ID_exists, itens_ID_dont_exists)
+    rank_articles()
