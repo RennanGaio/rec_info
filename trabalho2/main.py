@@ -2,6 +2,7 @@ import requests
 import json
 import pandas as pd
 import os
+import glob
 
 def check_exist_lang(lang,r, wiki_id):
     #checks if exists a wikipedia link of a given language of a given subject
@@ -79,12 +80,107 @@ def associate_page_views(itens_ID_exists, itens_ID_dont_exists):
         page_views_file.append(line)
     for i in itens_ID_dont_exists:
         eng_views=search_index_views(i, data,0)
-        line=str(i[0])+" "+str(eng_views)+" NULL"
+        line=str(i[0])+" "+str(eng_views)
         missing_rank_file.append(line)
 
 
 
+def create_array_model():
+    myfile = open("page_views.csv")
+    mylines = myfile.read().split('\n')
+    #y is the value that we want to predict, so y is the pt_page_views
+    #X is the array of the features, we only have one feature, the en+page_views
+    X=[]
+    y=[]
+    for line in mylines[1:len(mylines)]:
+        element = line.split(";")
+        #using try only to make sure that the program won't stop if a variable of the data set has some problem
+        try:
+            y.append(int(element[-1]))
+            X.append([float(x) for x in element[1:-2]])
+    X = np.array(X)
+    y = np.array(y)
+    return X,y
+
 def rank_articles():
+    X,y=create_array_model()
+    kn=10
+
+    kf = KFold(kn, shuffle=True)
+    metrics = [0,""]
+
+    Classifiers=["LR", "KNN", "RF", "NB","XGBoost"]
+
+    #this loop will interate for each classifier using diferents kfolds
+    for classifier in Classifiers:
+        for train_index, test_index in kf.split(X):
+            print "Classifier: ",classifier
+            print "using kfold= ",kn
+            print "\n"
+            #this will chose the classifier, and use gridSearch to choose the best hyper parameters focussing on reach the best AUC score
+            # Linear Regression
+            if classifier == "LR":
+              Cs = [ 10.0**c for c in xrange(-2, 3, 1) ]
+              clf = GridSearchCV(estimator=LogisticRegression(), param_grid=dict(C=Cs), scoring="roc_auc", n_jobs=-1, cv=5, verbose=0)
+            # K Neighbors
+            elif classifier == "KNN":
+              Ks = [ k for k in xrange(1, 15, 2) ]
+              clf = GridSearchCV(estimator=neighbors.KNeighborsClassifier(), param_grid=dict(n_neighbors=Ks), scoring="roc_auc", n_jobs=-1, cv=5, verbose=0)
+            #Nayve Bayes
+            elif classifier == "NB":
+              clf = GridSearchCV(estimator=GaussianNB(), param_grid=dict(),scoring="roc_auc", n_jobs=-1, cv=5, verbose=0)
+            #random forest
+            elif classifier == "RF":
+              estimators = [ e for e in xrange(5, 25, 5) ]
+              clf = GridSearchCV(estimator=RandomForestClassifier(), param_grid=dict(n_estimators=estimators), scoring="roc_auc", n_jobs=-1, cv=5, verbose=0)
+            #XGBoost
+            elif classifier == "XGBoost":
+              clf = xgb.XGBClassifier()
+
+            #this fit will train your classifier to your dataset
+            clf.fit(X[train_index],y[train_index])
+            #this will return the probability of each example be 0 or 1
+            y_pred = clf.predict_proba(X[test_index])
+            #this will generate the AUC score
+            auc = roc_auc_score(y[test_index], y_pred[:,1])
+            print "AUC: ", str(auc)
+            print "###########################\n"
+
+            #this will save the greater value, the estimator (model), the train and test set, to reproduce the best model with the real train set file
+            if (classifier!="XGBoost"):
+                if metrics[0]<auc:
+                    metrics=[auc, clf.best_estimator_, X[train_index], y[train_index]]
+            else:
+                if metrics[0]<auc:
+                    metrics=[auc, "xgboost",X[train_index], y[train_index]]
+
+    #he must use the classifier with the best score
+    if metrics[1]=="xgboost":
+        clf_greater=xgb.XGBClassifier()
+    else:
+        clf_greater=metrics[1]
+    clf_greater.fit(metrics[2], metrics[3])
+
+
+    #start to classify the missing data file
+    file_test = open("missing_rank.csv")
+
+    print "generating test labels!!\n"
+    mylines_test = file_test.read().split('\n')
+    #tratando arquivo de teste
+    X_test = []
+    signal = 1
+    for line in mylines_test[1:len(mylines_test)]:
+        element = line.split(";")
+        X_test.append([float(x) for x in element[1:-1]])
+    X_test = np.array(X_test)
+
+    probs = clf_greater.predict_proba(X_test)[:,1]
+
+    for idx,prob in enumerate(probs):
+        mylines_test[idx].append(prob)
+
+    print mylines_test.sort(key=lambda x:x[-1])
 
 
 #def match_editors():
